@@ -1,28 +1,24 @@
-# ⚔️ Kroniki Cienia — Prosta gra przeglądarkowa RPG
+# ⚔️ Kroniki Cienia v2.0 — Turowa gra RPG
 
-Tekstowa, turowa gra RPG napisana w czystym **HTML5**, **CSS3** oraz **JavaScript (ES6)** bez zewnętrznych bibliotek. Gotowa do uruchomienia lokalnie lub opublikowania przez **GitHub Pages**.
+Przeglądarkowa gra RPG napisana w czystym **HTML5**, **CSS3** oraz **JavaScript (ES6)** z wbudowaną grafiką wektorową **SVG** i systemem klas postaci.
 
 ## 📁 Struktura projektu
 
 ```text
-├── index.html   # Struktura interfejsu gry
-├── style.css    # Ciemny motyw i układ responsywny
-├── game.js      # Logika walki, rozwoju postaci i zapisu stanu (localStorage)
-└── README.md    # Dokumentacja repozytorium
+├── index.html      # Ekran wyboru klasy oraz główny widok gry
+├── style.css       # Stylizacja, paski HP/MP/PD i animacje walki
+├── svg-assets.js   # Wbudowane ilustracje wektorowe (klasy postaci, obóz, potwory)
+├── game.js         # Mechanika klas, walki turowej, awansowania i zapisu gry
+└── README.md       # Dokumentacja projektu
 ```
 
-## 🚀 Jak uruchomić
+## ✨ Nowości w wersji 2.0
 
-1. **Lokalnie:** Otwórz plik `index.html` w dowolnej przeglądarce internetowej (lub użyj rozszerzenia *Live Server* w Visual Studio Code).
-2. **Na GitHub Pages:**
-   - Wgraj wszystkie pliki do głównego katalogu swojego repozytorium na GitHubie.
-   - Wejdź w zakładkę **Settings** -> **Pages**.
-   - W sekcji *Build and deployment* wybierz gałąź `main` oraz folder `/ (root)` i kliknij **Save**.
-   - Po około minucie gra będzie dostępna pod adresem `https://twoja-nazwa.github.io/nazwa-repozytorium/`.
-
-## 🎮 Funkcje gry
-
-- System walki turowej (atak fizyczny, zaklęcie *Kula Ognia*, *Leczenie*, ucieczka).
-- Rozwój postaci (zdobywanie PD, awans na kolejne poziomy, wzrost statystyk).
-- Ekonomia i obóz (odpoczynek regenerujący HP/MP, ulepszanie broni u kowala).
-- Automatyczny zapis i wczytywanie stanu gry w przeglądarce (`localStorage`).
+1. **Wybór klasy postaci na start:**
+   - **Wojownik** — wysokie HP, pancerz redukujący obrażenia, umiejętność *Potężne Uderzenie*.
+   - **Mag** — duża pula Many, niszczycielska *Kula Ognia*.
+   - **Łowca Cieni** — szansa na cios krytyczny przy zwykłym ataku, łatwiejsza ucieczka, umiejętność *Zatrute Ostrze*.
+2. **Grafika wektorowa SVG:**
+   - Portrety każdej klasy postaci.
+   - Ilustracja obozu z ogniskiem oraz unikalne portrety wszystkich 5 przeciwników (Goblin, Wilk, Szkielet, Mroczny Mag, Golem).
+   - Wizualne paski życia, many i doświadczenia oraz animacja wstrząsu przy zadaniu obrażeń.
