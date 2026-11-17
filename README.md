@@ -1,24 +1,20 @@
-# ⚔️ Kroniki Cienia v2.0 — Turowa gra RPG
+# ⚔️ Kroniki Cienia v3.0 — Turowa gra RPG
 
-Przeglądarkowa gra RPG napisana w czystym **HTML5**, **CSS3** oraz **JavaScript (ES6)** z wbudowaną grafiką wektorową **SVG** i systemem klas postaci.
+Przeglądarkowa gra RPG napisana w czystym **HTML5**, **CSS3** oraz **JavaScript (ES6)** z grafiką wektorową **SVG**, wyborem klasy oraz pełnym cyklem fabularnym (wstęp, walka, zwycięstwo, porażka i finał gry).
 
 ## 📁 Struktura projektu
 
 ```text
-├── index.html      # Ekran wyboru klasy oraz główny widok gry
-├── style.css       # Stylizacja, paski HP/MP/PD i animacje walki
-├── svg-assets.js   # Wbudowane ilustracje wektorowe (klasy postaci, obóz, potwory)
-├── game.js         # Mechanika klas, walki turowej, awansowania i zapisu gry
-└── README.md       # Dokumentacja projektu
+├── index.html      # Wszystkie 6 ekranów gry (tytułowy, wybór klasy, gra, wygrana, przegrana, finał)
+├── style.css       # Stylizacja interfejsu, paski postępu i animacje
+├── svg-assets.js   # Grafiki wektorowe (herb gry, trofea, czaszka, korona, klasy i potwory)
+├── game.js         # Silnik gry, przełączanie widoków, walka i finałowy boss
+└── README.md       # Dokumentacja repozytorium
 ```
 
-## ✨ Nowości w wersji 2.0
+## ✨ Nowości w wersji 3.0
 
-1. **Wybór klasy postaci na start:**
-   - **Wojownik** — wysokie HP, pancerz redukujący obrażenia, umiejętność *Potężne Uderzenie*.
-   - **Mag** — duża pula Many, niszczycielska *Kula Ognia*.
-   - **Łowca Cieni** — szansa na cios krytyczny przy zwykłym ataku, łatwiejsza ucieczka, umiejętność *Zatrute Ostrze*.
-2. **Grafika wektorowa SVG:**
-   - Portrety każdej klasy postaci.
-   - Ilustracja obozu z ogniskiem oraz unikalne portrety wszystkich 5 przeciwników (Goblin, Wilk, Szkielet, Mroczny Mag, Golem).
-   - Wizualne paski życia, many i doświadczenia oraz animacja wstrząsu przy zadaniu obrażeń.
+- **Ekran tytułowy (Wstęp):** Wprowadzenie fabularne z herbem gry oraz przyciskami rozpoczęcia nowej gry lub kontynuacji zapisu.
+- **Ekran zwycięstwa po walce:** Podsumowanie zdobytego doświadczenia (PD), złota i ewentualnego awansu na nowy poziom.
+- **Ekran porażki:** Ekran końca gry po utracie wszystkich punktów życia z podsumowaniem statystyk poległego bohatera.
+- **Finałowy Boss i ekran ukończenia gry:** Po osiągnięciu **4. poziomu** w obozie pojawia się opcja szturmu na Cytadelę i walki z **Władcą Cienia**. Jego pokonanie kończy całą grę ekranem chwały.

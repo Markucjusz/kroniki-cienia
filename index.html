@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kroniki Cienia — RPG Przeglądarkowe v2.0</title>
+    <title>Kroniki Cienia — RPG Przeglądarkowe v3.0</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,15 +13,33 @@
             <p class="subtitle">Turowa gra tekstowo-graficzna RPG</p>
         </header>
 
-        <!-- EKRAN WYBORU KLASY -->
-        <section id="class-selection" class="class-selection">
+        <!-- 1. EKRAN TYTUŁOWY / WSTĘP -->
+        <section id="title-screen" class="screen-box title-screen">
+            <div class="title-art" id="svg-title-art"></div>
+            <h2>Cień nad Doliną Popiołów</h2>
+            <p class="story-text">
+                Od pokoleń mroczna cytadela na północy pozostawała uśpiona. Dziś z jej głębin wypełzły hordy potworów,
+                a pradawny <strong>Władca Cienia</strong> przebudził się, by pochłonąć krainę.
+            </p>
+            <p class="story-text">
+                Chwyć za broń, zdobądź doświadczenie na szlaku, ulepsz swój rynsztunek i pokonaj
+                5 strażników mroku, aby wyzwolić Dolinę!
+            </p>
+            <div class="title-actions">
+                <button id="start-btn" class="btn-primary btn-large">⚔️ Rozpocznij nową przygodę</button>
+                <button id="continue-btn" class="btn-action btn-large hidden">📜 Kontynuuj zapisaną grę</button>
+            </div>
+        </section>
+
+        <!-- 2. EKRAN WYBORU KLASY -->
+        <section id="class-selection" class="class-selection hidden">
             <h2>Wybierz swoją klasę postaci</h2>
             <p class="class-intro">Każda klasa posiada unikalne statystyki bazowe oraz specjalną umiejętność bojową.</p>
             <div class="class-grid">
                 <div class="class-card" data-class="warrior">
                     <div class="svg-wrapper" id="svg-preview-warrior"></div>
                     <h3>Wojownik</h3>
-                    <p class="class-desc">Mistrz broni białej o ogromnej wytrzymałości. Potężny cios mieczem ignoruje część obrony.</p>
+                    <p class="class-desc">Mistrz broni białej o ogromnej wytrzymałości. Potężny cios mieczem zadaje potężne obrażenia.</p>
                     <ul class="class-stats">
                         <li>❤️ Życie (HP): <strong>130</strong></li>
                         <li>💧 Mana (MP): <strong>30</strong></li>
@@ -59,7 +77,7 @@
             </div>
         </section>
 
-        <!-- GŁÓWNY INTERFEJS GRY -->
+        <!-- 3. GŁÓWNY INTERFEJS GRY -->
         <div id="game-screen" class="hidden">
             <section class="hero-banner">
                 <div class="hero-avatar" id="hero-avatar"></div>
@@ -86,6 +104,7 @@
                         <span>⚔️ Atak: <strong id="atk">12</strong></span>
                         <span>🛡️ Obrona: <strong id="def">2</strong></span>
                         <span>💰 Złoto: <strong id="gold">20</strong></span>
+                        <span>💀 Pokonani: <strong id="kills">0</strong></span>
                     </div>
                 </div>
             </section>
@@ -121,10 +140,47 @@
 
             <footer>
                 <button id="save-btn" class="btn-secondary">💾 Zapisz grę</button>
-                <button id="reset-btn" class="btn-danger">🗑️ Zmień klasę / Nowa gra</button>
+                <button id="reset-btn" class="btn-danger">🏠 Ekran tytułowy</button>
             </footer>
         </div>
+
+        <!-- 4. EKRAN ZWYCIĘSTWA W WALCE -->
+        <section id="victory-screen" class="screen-box victory-screen hidden">
+            <div class="result-icon" id="svg-victory-art"></div>
+            <h2 class="victory-title">Zwycięstwo w walce!</h2>
+            <p id="victory-summary" class="story-text"></p>
+            <div class="reward-box" id="victory-rewards"></div>
+            <button id="victory-continue-btn" class="btn-heal btn-large">🏕️ Wróć do obozu</button>
+        </section>
+
+        <!-- 5. EKRAN PORAŻKI (ŚMIERCI) -->
+        <section id="defeat-screen" class="screen-box defeat-screen hidden">
+            <div class="result-icon" id="svg-defeat-art"></div>
+            <h2 class="defeat-title">Poległeś na szlaku...</h2>
+            <p id="defeat-summary" class="story-text"></p>
+            <div class="reward-box" id="defeat-stats"></div>
+            <div class="title-actions">
+                <button id="defeat-retry-btn" class="btn-primary btn-large">🔄 Spróbuj ponownie (Wybór klasy)</button>
+                <button id="defeat-title-btn" class="btn-secondary btn-large">🏠 Wróć na ekran tytułowy</button>
+            </div>
+        </section>
+
+        <!-- 6. EKRAN UKOŃCZENIA CAŁEJ GRY (FINAŁ) -->
+        <section id="game-complete-screen" class="screen-box complete-screen hidden">
+            <div class="result-icon" id="svg-complete-art"></div>
+            <h2 class="complete-title">👑 Kraina Ocalona! Ukończyłeś Grę!</h2>
+            <p class="story-text">
+                <strong>Władca Cienia</strong> padł u Twoich stóp, a mroczna cytadela runęła w gruzy.
+                Twoje imię na zawsze zapisze się w pieśniach bardów Doliny Popiołów!
+            </p>
+            <div class="reward-box" id="complete-stats"></div>
+            <div class="title-actions">
+                <button id="complete-replay-btn" class="btn-primary btn-large">⚔️ Zagraj ponownie inną klasą</button>
+                <button id="complete-title-btn" class="btn-secondary btn-large">🏠 Ekran tytułowy</button>
+            </div>
+        </section>
     </div>
+
     <script src="svg-assets.js"></script>
     <script src="game.js"></script>
 </body>

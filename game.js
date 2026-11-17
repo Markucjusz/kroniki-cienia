@@ -6,8 +6,7 @@ const CLASS_CONFIG = {
         atk: 14,
         def: 4,
         skillName: "⚔️ Potężne Uderzenie (10 MP)",
-        skillCost: 10,
-        skillDesc: "Zadaje 175% obrażeń i przebija pancerz."
+        skillCost: 10
     },
     mage: {
         name: "Mag",
@@ -16,8 +15,7 @@ const CLASS_CONFIG = {
         atk: 10,
         def: 1,
         skillName: "🔥 Kula Ognia (16 MP)",
-        skillCost: 16,
-        skillDesc: "Potężne zaklęcie ognia zadające 240% bazowego ataku."
+        skillCost: 16
     },
     rogue: {
         name: "Łowca Cieni",
@@ -26,8 +24,7 @@ const CLASS_CONFIG = {
         atk: 13,
         def: 2,
         skillName: "🗡️ Zatrute Ostrze (12 MP)",
-        skillCost: 12,
-        skillDesc: "Gwarantowany cios krytyczny (200% obrażeń)."
+        skillCost: 12
     }
 };
 
@@ -36,22 +33,49 @@ let currentEnemy = null;
 let inCombat = false;
 
 const enemies = [
-    { name: "Leśny Goblin", sprite: "goblin", hp: 38, atk: 7, xp: 30, gold: 12 },
-    { name: "Dziki Wilk", sprite: "wolf", hp: 55, atk: 10, xp: 45, gold: 18 },
-    { name: "Szkielet Wojownik", sprite: "skeleton", hp: 80, atk: 14, xp: 75, gold: 32 },
-    { name: "Mroczny Mag", sprite: "darkmage", hp: 115, atk: 19, xp: 125, gold: 55 },
-    { name: "Kamienny Golem", sprite: "golem", hp: 190, atk: 26, xp: 240, gold: 110 }
+    { name: "Leśny Goblin", sprite: "goblin", hp: 38, atk: 7, xp: 35, gold: 14, isBoss: false },
+    { name: "Dziki Wilk", sprite: "wolf", hp: 55, atk: 10, xp: 50, gold: 20, isBoss: false },
+    { name: "Szkielet Wojownik", sprite: "skeleton", hp: 82, atk: 14, xp: 80, gold: 35, isBoss: false },
+    { name: "Mroczny Mag", sprite: "darkmage", hp: 115, atk: 19, xp: 130, gold: 60, isBoss: false },
+    { name: "Kamienny Golem", sprite: "golem", hp: 175, atk: 24, xp: 220, gold: 105, isBoss: false }
 ];
 
-const classSelectionEl = document.getElementById("class-selection");
-const gameScreenEl = document.getElementById("game-screen");
+const FINAL_BOSS = {
+    name: "Władca Cienia (BOSS)",
+    sprite: "shadowlord",
+    hp: 260,
+    atk: 30,
+    xp: 500,
+    gold: 300,
+    isBoss: true
+};
+
+// Referencje do ekranów
+const screens = {
+    title: document.getElementById("title-screen"),
+    classSelect: document.getElementById("class-selection"),
+    game: document.getElementById("game-screen"),
+    victory: document.getElementById("victory-screen"),
+    defeat: document.getElementById("defeat-screen"),
+    complete: document.getElementById("game-complete-screen")
+};
+
 const logEl = document.getElementById("log");
 const controlsEl = document.getElementById("controls");
 const enemyPanelEl = document.getElementById("enemy-panel");
 const sceneBoxEl = document.getElementById("scene-box");
 
-// Wstawienie podglądu SVG na ekranie wyboru klasy
-function initClassPreviews() {
+function switchScreen(screenKey) {
+    Object.values(screens).forEach(el => el.classList.add("hidden"));
+    screens[screenKey].classList.remove("hidden");
+}
+
+function initStaticArt() {
+    document.getElementById("svg-title-art").innerHTML = SVG_ASSETS.titleCrest;
+    document.getElementById("svg-victory-art").innerHTML = SVG_ASSETS.victoryTrophy;
+    document.getElementById("svg-defeat-art").innerHTML = SVG_ASSETS.defeatSkull;
+    document.getElementById("svg-complete-art").innerHTML = SVG_ASSETS.completeCrown;
+
     document.getElementById("svg-preview-warrior").innerHTML = SVG_ASSETS.warrior;
     document.getElementById("svg-preview-mage").innerHTML = SVG_ASSETS.mage;
     document.getElementById("svg-preview-rogue").innerHTML = SVG_ASSETS.rogue;
@@ -59,6 +83,18 @@ function initClassPreviews() {
     document.querySelectorAll(".select-class-btn").forEach(btn => {
         btn.onclick = () => startNewCharacter(btn.dataset.class);
     });
+}
+
+function checkSavedGameOnTitle() {
+    const saved = localStorage.getItem("kroniki_cienia_v3_save");
+    const continueBtn = document.getElementById("continue-btn");
+    if (saved) {
+        const parsed = JSON.parse(saved);
+        continueBtn.classList.remove("hidden");
+        continueBtn.textContent = `📜 Kontynuuj (${parsed.className}, Poz. ${parsed.lvl})`;
+    } else {
+        continueBtn.classList.add("hidden");
+    }
 }
 
 function startNewCharacter(classKey) {
@@ -76,20 +112,20 @@ function startNewCharacter(classKey) {
         atk: cfg.atk,
         def: cfg.def,
         gold: 25,
-        weaponLvl: 1
+        weaponLvl: 1,
+        kills: 0
     };
     inCombat = false;
     currentEnemy = null;
     logEl.innerHTML = "";
     saveGame(false);
-    showGameScreen();
-    addLog(`Rozpoczynasz przygodę jako ${player.className}!`, "log-loot");
+    enterGameView();
+    addLog(`Rozpoczynasz przygodę jako ${player.className}! Osiągnij 4. poziom, aby wyzwać Władcę Cienia.`, "log-loot");
     updateUI();
 }
 
-function showGameScreen() {
-    classSelectionEl.classList.add("hidden");
-    gameScreenEl.classList.remove("hidden");
+function enterGameView() {
+    switchScreen("game");
     document.getElementById("hero-avatar").innerHTML = SVG_ASSETS[player.classKey];
     document.getElementById("hero-class-name").textContent = player.className;
 }
@@ -120,8 +156,8 @@ function updateUI() {
     document.getElementById("atk").textContent = player.atk;
     document.getElementById("def").textContent = player.def;
     document.getElementById("gold").textContent = player.gold;
+    document.getElementById("kills").textContent = player.kills;
 
-    // Paski postępu
     document.getElementById("hp-bar").style.width = `${(player.hp / player.maxHp) * 100}%`;
     document.getElementById("mp-bar").style.width = `${(player.mp / player.maxMp) * 100}%`;
     document.getElementById("xp-bar").style.width = `${Math.min(100, (player.xp / player.xpNext) * 100)}%`;
@@ -146,14 +182,21 @@ function renderControls() {
 
     if (!inCombat) {
         document.getElementById("location-title").textContent = "Obóz Podróżników";
-        document.getElementById("location-desc").textContent = "Ognisko płonie spokojnie. Możesz odpocząć, ulepszyć ekwipunek lub ruszyć na szlak.";
+        document.getElementById("location-desc").textContent = player.lvl >= 4
+            ? "Jesteś wystarczająco silny, by szturmować Cytadelę i pokonać Władcę Cienia!"
+            : "Trenuj na szlaku i ulepszaj broń. Na 4. poziomie odblokujesz walkę z finałowym bossem.";
 
-        const exploreBtn = createBtn("🌲 Wyrusz na szlak (Walka)", "btn-primary", startCombat);
+        const exploreBtn = createBtn("🌲 Wyrusz na szlak (Walka)", "btn-primary", () => startCombat(false));
         const restBtn = createBtn("🔥 Odpocznij przy ognisku (10 złota)", "btn-heal", restAtCamp);
         const upgradeCost = player.weaponLvl * 25;
         const upgradeBtn = createBtn(`⚒️ Ulepsz broń (+4 Ataku | ${upgradeCost} złota)`, "btn-action", () => upgradeWeapon(upgradeCost));
 
         controlsEl.append(exploreBtn, restBtn, upgradeBtn);
+
+        if (player.lvl >= 4) {
+            const bossBtn = createBtn("👑 Szturmuj Cytadelę (FINAŁOWY BOSS)", "btn-boss", () => startCombat(true));
+            controlsEl.append(bossBtn);
+        }
     } else {
         document.getElementById("location-title").textContent = `Walka: ${currentEnemy.name}`;
         document.getElementById("location-desc").textContent = "Wybierz akcję w swojej turze!";
@@ -176,18 +219,21 @@ function createBtn(label, className, onClick) {
     return btn;
 }
 
-function startCombat() {
-    const maxIndex = Math.min(enemies.length - 1, Math.floor(player.lvl / 1.4));
-    const template = enemies[Math.floor(Math.random() * (maxIndex + 1))];
-    currentEnemy = { ...template, maxHp: template.hp };
+function startCombat(isFinalBoss = false) {
+    if (isFinalBoss) {
+        currentEnemy = { ...FINAL_BOSS, maxHp: FINAL_BOSS.hp };
+    } else {
+        const maxIndex = Math.min(enemies.length - 1, Math.floor(player.lvl / 1.3));
+        const template = enemies[Math.floor(Math.random() * (maxIndex + 1))];
+        currentEnemy = { ...template, maxHp: template.hp };
+    }
     inCombat = true;
-    addLog(`Napotkałeś przeciwnika: ${currentEnemy.name} (HP: ${currentEnemy.hp})!`, "log-damage");
+    addLog(`Starcie! Na drodze staje ${currentEnemy.name} (HP: ${currentEnemy.hp})!`, "log-damage");
     updateUI();
 }
 
 function playerAttack() {
     let dmg = Math.floor(player.atk * (0.85 + Math.random() * 0.3));
-    // Łowca ma 25% szansy na cios krytyczny przy zwykłym ataku
     if (player.classKey === "rogue" && Math.random() < 0.25) {
         dmg = Math.floor(dmg * 1.6);
         addLog(`Cios krytyczny! Zadajesz ${dmg} obrażeń przeciwnikowi ${currentEnemy.name}!`, "log-loot");
@@ -238,11 +284,11 @@ function castHeal() {
 }
 
 function fleeCombat() {
-    const fleeChance = player.classKey === "rogue" ? 0.85 : 0.65;
+    const fleeChance = currentEnemy.isBoss ? 0.35 : (player.classKey === "rogue" ? 0.85 : 0.65);
     if (Math.random() < fleeChance) {
         inCombat = false;
         currentEnemy = null;
-        addLog("Udało Ci się bezpiecznie wycofać do obozu.", "log-info");
+        addLog("Udało Ci się wycofać do obozu.", "log-info");
         updateUI();
     } else {
         addLog("Nie udało się uciec!", "log-damage");
@@ -253,17 +299,27 @@ function fleeCombat() {
 
 function checkCombatState() {
     if (currentEnemy.hp <= 0) {
-        addLog(`Pokonałeś ${currentEnemy.name}! Zdobywasz ${currentEnemy.xp} PD i ${currentEnemy.gold} złota.`, "log-loot");
-        player.xp += currentEnemy.xp;
-        player.gold += currentEnemy.gold;
+        const defeatedEnemy = { ...currentEnemy };
+        player.xp += defeatedEnemy.xp;
+        player.gold += defeatedEnemy.gold;
+        player.kills += 1;
         inCombat = false;
         currentEnemy = null;
-        checkLevelUp();
-        updateUI();
+
+        const leveledUp = checkLevelUp();
+        saveGame(false);
+
+        if (defeatedEnemy.isBoss) {
+            showGameCompleteScreen();
+        } else {
+            showVictoryScreen(defeatedEnemy, leveledUp);
+        }
         return;
     }
     enemyTurn();
-    updateUI();
+    if (player && player.hp > 0) {
+        updateUI();
+    }
 }
 
 function enemyTurn() {
@@ -271,25 +327,61 @@ function enemyTurn() {
     const rawDmg = Math.floor(currentEnemy.atk * (0.85 + Math.random() * 0.3));
     const dmg = Math.max(1, rawDmg - player.def);
     player.hp = Math.max(0, player.hp - dmg);
-    addLog(`${currentEnemy.name} atakuje i zadaje Ci ${dmg} obrażeń (zredukowano o ${player.def} pancerzem).`, "log-damage");
+    addLog(`${currentEnemy.name} atakuje i zadaje Ci ${dmg} obrażeń (zredukowano o ${player.def}).`, "log-damage");
 
     if (player.hp <= 0) {
-        addLog("Poległeś w walce! Budzisz się w obozie, tracąc połowę złota.", "log-damage");
-        player.gold = Math.floor(player.gold / 2);
-        player.hp = player.maxHp;
-        player.mp = player.maxMp;
+        const killerName = currentEnemy.name;
         inCombat = false;
         currentEnemy = null;
+        localStorage.removeItem("kroniki_cienia_v3_save");
+        showDefeatScreen(killerName);
     }
 }
 
+function showVictoryScreen(enemy, leveledUp) {
+    document.getElementById("victory-summary").textContent = `Pokonałeś przeciwnika: ${enemy.name}!`;
+    let rewardsHtml = `
+        <p>✨ Zdobyte doświadczenie: <strong>+${enemy.xp} PD</strong></p>
+        <p>💰 Zdobyte złoto: <strong>+${enemy.gold} sztuk</strong></p>
+        <p>❤️ Pozostałe zdrowie: <strong>${player.hp} / ${player.maxHp} HP</strong></p>
+    `;
+    if (leveledUp) {
+        rewardsHtml += `<p style="color: #f6e05e; margin-top: 8px;">🎉 AWANS! Osiągnąłeś ${player.lvl}. poziom doświadczenia!</p>`;
+    }
+    document.getElementById("victory-rewards").innerHTML = rewardsHtml;
+    switchScreen("victory");
+}
+
+function showDefeatScreen(killerName) {
+    document.getElementById("defeat-summary").textContent = `Twoja wyprawa zakończyła się śmiercią z rąk: ${killerName}.`;
+    document.getElementById("defeat-stats").innerHTML = `
+        <p>🛡️ Klasa: <strong>${player.className}</strong></p>
+        <p>⭐ Osiągnięty poziom: <strong>${player.lvl}</strong></p>
+        <p>💀 Pokonani wrogowie: <strong>${player.kills}</strong></p>
+        <p>💰 Zebrane złoto: <strong>${player.gold}</strong></p>
+    `;
+    switchScreen("defeat");
+}
+
+function showGameCompleteScreen() {
+    localStorage.removeItem("kroniki_cienia_v3_save");
+    document.getElementById("complete-stats").innerHTML = `
+        <p>🏆 Bohater: <strong>${player.className} (Poziom ${player.lvl})</strong></p>
+        <p>💀 Łącznie pokonanych potworów: <strong>${player.kills}</strong></p>
+        <p>⚔️ Poziom ulepszenia broni: <strong>+${player.weaponLvl - 1} (Atak: ${player.atk})</strong></p>
+        <p>💰 Zgromadzony skarbiec: <strong>${player.gold} złota</strong></p>
+    `;
+    switchScreen("complete");
+}
+
 function checkLevelUp() {
+    let leveledUp = false;
     while (player.xp >= player.xpNext) {
         player.xp -= player.xpNext;
         player.lvl++;
         player.xpNext = Math.floor(player.xpNext * 1.4);
+        leveledUp = true;
 
-        // Skalowanie statystyk zależne od klasy
         if (player.classKey === "warrior") {
             player.maxHp += 28;
             player.maxMp += 6;
@@ -310,6 +402,7 @@ function checkLevelUp() {
         player.mp = player.maxMp;
         addLog(`AWANS! Osiągnąłeś ${player.lvl}. poziom doświadczenia!`, "log-loot");
     }
+    return leveledUp;
 }
 
 function restAtCamp() {
@@ -342,33 +435,51 @@ function upgradeWeapon(cost) {
 
 function saveGame(showMessage = true) {
     if (!player) return;
-    localStorage.setItem("kroniki_cienia_v2_save", JSON.stringify(player));
+    localStorage.setItem("kroniki_cienia_v3_save", JSON.stringify(player));
     if (showMessage) {
         addLog("Stan gry został zapisany w pamięci przeglądarki.", "log-heal");
     }
 }
 
-function loadGame() {
-    initClassPreviews();
-    const saved = localStorage.getItem("kroniki_cienia_v2_save");
+// Obsługa przycisków nawigacji między ekranami
+document.getElementById("start-btn").onclick = () => switchScreen("classSelect");
+
+document.getElementById("continue-btn").onclick = () => {
+    const saved = localStorage.getItem("kroniki_cienia_v3_save");
     if (saved) {
         player = JSON.parse(saved);
-        showGameScreen();
+        enterGameView();
         addLog(`Wczytano zapisaną postać (${player.className}, Poz. ${player.lvl}).`, "log-info");
         updateUI();
     }
-}
+};
+
+document.getElementById("victory-continue-btn").onclick = () => {
+    enterGameView();
+    addLog("Wracasz do obozu z łupami.", "log-info");
+    updateUI();
+};
+
+document.getElementById("defeat-retry-btn").onclick = () => switchScreen("classSelect");
+document.getElementById("defeat-title-btn").onclick = () => {
+    checkSavedGameOnTitle();
+    switchScreen("title");
+};
+
+document.getElementById("complete-replay-btn").onclick = () => switchScreen("classSelect");
+document.getElementById("complete-title-btn").onclick = () => {
+    checkSavedGameOnTitle();
+    switchScreen("title");
+};
 
 document.getElementById("save-btn").onclick = () => saveGame(true);
 document.getElementById("reset-btn").onclick = () => {
-    if (confirm("Czy na pewno chcesz usunąć obecną postać i wrócić do wyboru klasy?")) {
-        localStorage.removeItem("kroniki_cienia_v2_save");
-        player = null;
-        inCombat = false;
-        currentEnemy = null;
-        gameScreenEl.classList.add("hidden");
-        classSelectionEl.classList.remove("hidden");
-    }
+    saveGame(false);
+    checkSavedGameOnTitle();
+    switchScreen("title");
 };
 
-loadGame();
+// Start aplikacji
+initStaticArt();
+checkSavedGameOnTitle();
+switchScreen("title");

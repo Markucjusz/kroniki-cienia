@@ -44,6 +44,66 @@ header h1 {
     display: none !important;
 }
 
+/* EKRANY WSTĘPU I ZAKOŃCZEŃ */
+.screen-box {
+    text-align: center;
+    padding: 20px 12px;
+    background-color: #13161c;
+    border: 1px solid #2d333f;
+    border-radius: 8px;
+}
+
+.title-art, .result-icon {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 18px auto;
+}
+
+.screen-box h2 {
+    font-size: 1.65rem;
+    margin-bottom: 12px;
+    color: #f6ad55;
+}
+
+.victory-title { color: #68d391 !important; }
+.defeat-title { color: #fc8181 !important; }
+.complete-title { color: #f6e05e !important; }
+
+.story-text {
+    max-width: 620px;
+    margin: 0 auto 14px auto;
+    color: #cbd5e1;
+    font-size: 1rem;
+}
+
+.reward-box {
+    max-width: 460px;
+    margin: 18px auto 22px auto;
+    background-color: #1a1e26;
+    border: 1px solid #323946;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 0.95rem;
+    color: #f8fafc;
+}
+
+.reward-box p {
+    margin-bottom: 6px;
+}
+
+.title-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.btn-large {
+    padding: 12px 22px;
+    font-size: 1rem;
+}
+
 /* WYBÓR KLASY */
 .class-selection h2 {
     text-align: center;
@@ -201,7 +261,8 @@ header h1 {
 
 .mini-stats {
     display: flex;
-    gap: 18px;
+    flex-wrap: wrap;
+    gap: 16px;
     font-size: 0.9rem;
     color: #e2e8f0;
     border-top: 1px solid #252a34;
@@ -258,7 +319,6 @@ header h1 {
     color: #feb2b2;
 }
 
-/* ANIMACJA OBRAŻEŃ */
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-6px); }
@@ -301,6 +361,9 @@ button:active {
 .btn-heal { background-color: #38a169; color: #fff; }
 .btn-heal:hover { background-color: #2f855a; }
 
+.btn-boss { background-color: #805ad5; color: #fff; }
+.btn-boss:hover { background-color: #6b46c1; }
+
 .btn-secondary { background-color: #4a5568; color: #fff; }
 .btn-secondary:hover { background-color: #2d3748; }
 
@@ -319,7 +382,7 @@ button:active {
     border: 1px solid #2d333f;
     border-radius: 6px;
     padding: 12px;
-    height: 200px;
+    height: 190px;
     overflow-y: auto;
     font-family: Consolas, monospace;
     font-size: 0.88rem;
