@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kroniki Cienia v4.0 — Pełne RPG Przeglądarkowe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <h1>⚔️ Kroniki Cienia</h1>
+                <div class="header-tools">
+                    <button id="sound-toggle-btn" class="btn-icon" title="Włącz/Wyłącz dźwięk">🔊</button>
+                    <button id="bestiary-btn" class="btn-icon" title="Bestiariusz i Osiągnięcia">📖 Księga</button>
+                </div>
+            </div>
+            <p class="subtitle">Turowa gra RPG v4.0 • Lokacje • Ekwipunek • Zadania • Bestiariusz</p>
+        </header>
+
+        <!-- 1. EKRAN TYTUŁOWY / WSTĘP -->
+        <section id="title-screen" class="screen-box title-screen">
+            <div class="title-art" id="svg-title-art"></div>
+            <h2>Cień nad Doliną Popiołów</h2>
+            <p class="story-text">
+                Z północnej Cytadeli wypełzły hordy mroku, a <strong>Władca Cienia</strong> przebudził się, by pochłonąć krainę.
+                Przemierzaj <strong>Mroczny Las</strong>, <strong>Opuszczone Kopalnie</strong> oraz <strong>Przeklęte Ruiny</strong>,
+                realizuj zlecenia, wzmacniaj ekwipunek i wyzwól Dolinę!
+            </p>
+            <div class="title-actions">
+                <button id="start-btn" class="btn-primary btn-large">⚔️ Rozpocznij nową przygodę</button>
+                <button id="continue-btn" class="btn-action btn-large hidden">📜 Kontynuuj zapisaną grę</button>
+            </div>
+        </section>
+
+        <!-- 2. EKRAN WYBORU KLASY -->
+        <section id="class-selection" class="class-selection hidden">
+            <h2>Wybierz swoją klasę postaci</h2>
+            <p class="class-intro">Każda klasa posiada unikalne statystyki oraz efekt bojowy umiejętności.</p>
+            <div class="class-grid">
+                <div class="class-card" data-class="warrior">
+                    <div class="svg-wrapper" id="svg-preview-warrior"></div>
+                    <h3>Wojownik</h3>
+                    <p class="class-desc">Potężny pancerz i wytrzymałość. Umiejętność ogłusza przeciwnika na 1 turę.</p>
+                    <ul class="class-stats">
+                        <li>❤️ HP: <strong>135</strong> | 💧 MP: <strong>30</strong></li>
+                        <li>⚔️ Atak: <strong>14</strong> | 🛡️ Obrona: <strong>4</strong></li>
+                        <li>✨ Zdolność: <em>Grzmot Tarczy (165% + Ogłuszenie)</em></li>
+                    </ul>
+                    <button class="btn-primary select-class-btn" data-class="warrior">Wybierz Wojownika</button>
+                </div>
+
+                <div class="class-card" data-class="mage">
+                    <div class="svg-wrapper" id="svg-preview-mage"></div>
+                    <h3>Mag</h3>
+                    <p class="class-desc">Wielka pula many i magia ognia podpalająca przeciwników na 3 tury.</p>
+                    <ul class="class-stats">
+                        <li>❤️ HP: <strong>85</strong> | 💧 MP: <strong>85</strong></li>
+                        <li>⚔️ Atak: <strong>10</strong> | 🛡️ Obrona: <strong>1</strong></li>
+                        <li>✨ Zdolność: <em>Kula Ognia (220% + Podpalenie)</em></li>
+                    </ul>
+                    <button class="btn-action select-class-btn" data-class="mage">Wybierz Maga</button>
+                </div>
+
+                <div class="class-card" data-class="rogue">
+                    <div class="svg-wrapper" id="svg-preview-rogue"></div>
+                    <h3>Łowca Cieni</h3>
+                    <p class="class-desc">Wysoka szansa na cios krytyczny oraz śmiertelna trucizna działająca co turę.</p>
+                    <ul class="class-stats">
+                        <li>❤️ HP: <strong>105</strong> | 💧 MP: <strong>50</strong></li>
+                        <li>⚔️ Atak: <strong>13</strong> | 🛡️ Obrona: <strong>2</strong></li>
+                        <li>✨ Zdolność: <em>Zatrute Ostrze (180% + Trucizna)</em></li>
+                    </ul>
+                    <button class="btn-heal select-class-btn" data-class="rogue">Wybierz Łowcę</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. GŁÓWNY INTERFEJS GRY -->
+        <div id="game-screen" class="hidden">
+            <!-- BANER BOHATERA -->
+            <section class="hero-banner">
+                <div class="hero-avatar" id="hero-avatar"></div>
+                <div class="hero-details">
+                    <div class="hero-title-row">
+                        <h2 id="hero-class-name">Bohater</h2>
+                        <span class="lvl-badge">Poziom <strong id="lvl">1</strong></span>
+                    </div>
+                    <div class="bars-container">
+                        <div class="bar-group">
+                            <div class="bar-label"><span>HP</span><span><strong id="hp">100</strong>/<span id="max-hp">100</span></span></div>
+                            <div class="progress-bar"><div id="hp-bar" class="progress-fill hp-fill" style="width: 100%;"></div></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar-label"><span>MP</span><span><strong id="mp">50</strong>/<span id="max-mp">50</span></span></div>
+                            <div class="progress-bar"><div id="mp-bar" class="progress-fill mp-fill" style="width: 100%;"></div></div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar-label"><span>PD</span><span><strong id="xp">0</strong>/<span id="xp-next">100</span></span></div>
+                            <div class="progress-bar"><div id="xp-bar" class="progress-fill xp-fill" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                    <div class="mini-stats">
+                        <span>⚔️ Atak: <strong id="atk">12</strong> <small id="buff-indicator" class="buff-tag"></small></span>
+                        <span>🛡️ Obrona: <strong id="def">2</strong></span>
+                        <span>💰 Złoto: <strong id="gold">25</strong></span>
+                        <span>🔮 Amulet: <strong id="amulet-name">Brak</strong></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PASEK AKTYWNEGO ZLECENIA (QUEST) -->
+            <section id="quest-bar" class="quest-bar">
+                <div>
+                    <span class="quest-tag">📜 Zlecenie:</span>
+                    <strong id="quest-title">Brak</strong> — <span id="quest-progress">0/0</span>
+                </div>
+                <button id="claim-quest-btn" class="btn-heal btn-sm hidden">🎁 Odbierz nagrodę!</button>
+            </section>
+
+            <main class="game-area">
+                <!-- SCENA WIZUALNA (SVG LOKACJI / PRZECIWNIKA + PŁYWAJĄCE OBRAŻENIA) -->
+                <div class="scene-box" id="scene-box">
+                    <div class="scene-svg-wrap">
+                        <div id="scene-svg" class="scene-svg"></div>
+                        <div id="floating-layer" class="floating-layer"></div>
+                    </div>
+                    <div class="scene-caption">
+                        <h3 id="location-title">Obóz Podróżników</h3>
+                        <p id="location-desc">Bezpieczne miejsce przy ognisku.</p>
+                        <div id="status-badges" class="status-badges"></div>
+                    </div>
+                </div>
+
+                <!-- PANEL PRZECIWNIKA -->
+                <div id="enemy-panel" class="enemy-panel hidden">
+                    <div class="enemy-header">
+                        <h3 id="enemy-name">Przeciwnik</h3>
+                        <span>HP: <strong id="enemy-hp">0</strong> / <span id="enemy-max-hp">0</span></span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="enemy-hp-bar" class="progress-fill enemy-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- GŁÓWNE PRZYCISKI AKCJI -->
+                <div class="controls" id="controls"></div>
+
+                <!-- SKLEP / KUŹNIA / PLECAK (WIDOK ROZWIJANY W OBOZIE LUB WALCE) -->
+                <div id="sub-panel" class="sub-panel hidden"></div>
+
+                <!-- DZIENNIK WYDARZEŃ -->
+                <div class="log-container">
+                    <h3>Dziennik wydarzeń</h3>
+                    <div id="log" class="log"></div>
+                </div>
+            </main>
+
+            <footer>
+                <button id="save-btn" class="btn-secondary">💾 Zapisz grę</button>
+                <button id="reset-btn" class="btn-danger">🏠 Ekran tytułowy</button>
+            </footer>
+        </div>
+
+        <!-- 4. EKRAN ZWYCIĘSTWA W WALCE -->
+        <section id="victory-screen" class="screen-box victory-screen hidden">
+            <div class="result-icon" id="svg-victory-art"></div>
+            <h2 class="victory-title">Zwycięstwo w walce!</h2>
+            <p id="victory-summary" class="story-text"></p>
+            <div class="reward-box" id="victory-rewards"></div>
+            <button id="victory-continue-btn" class="btn-heal btn-large">🏕️ Wróć do obozu</button>
+        </section>
+
+        <!-- 5. EKRAN PORAŻKI -->
+        <section id="defeat-screen" class="screen-box defeat-screen hidden">
+            <div class="result-icon" id="svg-defeat-art"></div>
+            <h2 class="defeat-title">Poległeś na szlaku...</h2>
+            <p id="defeat-summary" class="story-text"></p>
+            <div class="reward-box" id="defeat-stats"></div>
+            <div class="title-actions">
+                <button id="defeat-retry-btn" class="btn-primary btn-large">🔄 Spróbuj ponownie</button>
+                <button id="defeat-title-btn" class="btn-secondary btn-large">🏠 Ekran tytułowy</button>
+            </div>
+        </section>
+
+        <!-- 6. EKRAN UKOŃCZENIA GRY -->
+        <section id="game-complete-screen" class="screen-box complete-screen hidden">
+            <div class="result-icon" id="svg-complete-art"></div>
+            <h2 class="complete-title">👑 Kraina Ocalona! Ukończyłeś Grę!</h2>
+            <p class="story-text">
+                <strong>Władca Cienia</strong> padł u Twoich stóp, a mroczna cytadela runęła w gruzy.
+                Twoje czyny zapiszą się na kartach historii Doliny Popiołów!
+            </p>
+            <div class="reward-box" id="complete-stats"></div>
+            <div class="title-actions">
+                <button id="complete-replay-btn" class="btn-primary btn-large">⚔️ Zagraj inną klasą</button>
+                <button id="complete-title-btn" class="btn-secondary btn-large">🏠 Ekran tytułowy</button>
+            </div>
+        </section>
+
+        <!-- MODAL: BESTIARIUSZ I OSIĄGNIĘCIA -->
+        <div id="codex-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📖 Bestiariusz i Osiągnięcia</h2>
+                    <button id="close-codex-btn" class="btn-danger btn-sm">✖ Zamknij</button>
+                </div>
+                <div class="codex-tabs">
+                    <button id="tab-bestiary" class="btn-action btn-sm">🐺 Bestiariusz</button>
+                    <button id="tab-achievements" class="btn-secondary btn-sm">🏆 Osiągnięcia</button>
+                </div>
+                <div id="codex-body" class="codex-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="sound.js"></script>
+    <script src="svg-assets.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
