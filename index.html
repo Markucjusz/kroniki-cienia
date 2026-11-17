@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kroniki Cienia — Proste RPG Przeglądarkowe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚔️ Kroniki Cienia</h1>
+            <p class="subtitle">Turowa gra tekstowa RPG</p>
+        </header>
+
+        <section class="stats-panel">
+            <div class="stat-box"><span>Poziom:</span> <strong id="lvl">1</strong></div>
+            <div class="stat-box"><span>PD:</span> <strong id="xp">0</strong> / <span id="xp-next">100</span></div>
+            <div class="stat-box"><span>Życie (HP):</span> <strong id="hp">100</strong> / <span id="max-hp">100</span></div>
+            <div class="stat-box"><span>Mana (MP):</span> <strong id="mp">50</strong> / <span id="max-mp">50</span></div>
+            <div class="stat-box"><span>Atak:</span> <strong id="atk">12</strong></div>
+            <div class="stat-box"><span>Złoto:</span> <strong id="gold">20</strong> 💰</div>
+        </section>
+
+        <main class="game-area">
+            <div class="location-info">
+                <h2 id="location-title">Obóz Podróżników</h2>
+                <p id="location-desc">Bezpieczne miejsce przy ognisku. Możesz tu odpocząć lub ulepszyć ekwipunek przed wyprawą.</p>
+            </div>
+
+            <div id="enemy-panel" class="enemy-panel hidden">
+                <h3 id="enemy-name">Przeciwnik</h3>
+                <p>HP Przeciwnika: <strong id="enemy-hp">0</strong> / <span id="enemy-max-hp">0</span></p>
+            </div>
+
+            <div class="controls" id="controls">
+                <!-- Przyciski generowane dynamicznie w game.js -->
+            </div>
+
+            <div class="log-container">
+                <h3>Dziennik wydarzeń</h3>
+                <div id="log" class="log"></div>
+            </div>
+        </main>
+
+        <footer>
+            <button id="save-btn" class="btn-secondary">💾 Zapisz grę</button>
+            <button id="reset-btn" class="btn-danger">🗑️ Nowa gra</button>
+        </footer>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

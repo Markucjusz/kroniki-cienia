@@ -1,0 +1,181 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121417;
+    color: #e2e8f0;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #1e2229;
+    border: 1px solid #2d333f;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2d333f;
+    padding-bottom: 15px;
+}
+
+header h1 {
+    color: #f6ad55;
+    font-size: 1.8rem;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.stats-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    background-color: #16191f;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #2d333f;
+}
+
+.stat-box {
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.stat-box span {
+    color: #94a3b8;
+    display: block;
+    font-size: 0.8rem;
+}
+
+.location-info {
+    background-color: #252a34;
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border-left: 4px solid #f6ad55;
+}
+
+.enemy-panel {
+    background-color: #3b1d22;
+    border: 1px solid #9b2c2c;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.2s;
+}
+
+.btn-primary {
+    background-color: #dd6b20;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #c05621;
+}
+
+.btn-action {
+    background-color: #3182ce;
+    color: #fff;
+}
+
+.btn-action:hover {
+    background-color: #2b6cb0;
+}
+
+.btn-heal {
+    background-color: #38a169;
+    color: #fff;
+}
+
+.btn-heal:hover {
+    background-color: #2f855a;
+}
+
+.btn-secondary {
+    background-color: #4a5568;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #2d3748;
+}
+
+.btn-danger {
+    background-color: #c53030;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #9b2c2c;
+}
+
+.log-container h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: #cbd5e0;
+}
+
+.log {
+    background-color: #121417;
+    border: 1px solid #2d333f;
+    border-radius: 6px;
+    padding: 12px;
+    height: 220px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.log p {
+    margin-bottom: 6px;
+    border-bottom: 1px solid #1e2229;
+    padding-bottom: 4px;
+}
+
+.log-damage { color: #fc8181; }
+.log-heal { color: #68d391; }
+.log-loot { color: #f6e05e; }
+.log-info { color: #90cdf4; }
+
+footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #2d333f;
+    display: flex;
+    justify-content: space-between;
+}
